@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manik Pandey - AI & Robotics Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Google Fonts: Poppins & Roboto Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS for advanced effects */
+        :root {
+            --dark-bg: #0a0a1a;
+            --glow-1: #ff00c1;
+            --glow-2: #9a00ff;
+            --glow-3: #00e5ff;
+            --glass-bg: rgba(20, 20, 40, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #e0e0e0;
+            --highlight-color: #f0f0f0;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide the default cursor */
+        }
+        .font-roboto-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* --- Aurora & Grid Background --- */
+        .aurora-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .aurora-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.3;
+        }
+        .aurora-blob:nth-child(1) { width: 500px; height: 500px; background: var(--glow-1); top: -150px; left: -150px; animation: move-blob-1 25s infinite alternate ease-in-out; }
+        .aurora-blob:nth-child(2) { width: 600px; height: 600px; background: var(--glow-2); bottom: -200px; right: -200px; animation: move-blob-2 30s infinite alternate ease-in-out; }
+        .aurora-blob:nth-child(3) { width: 400px; height: 400px; background: var(--glow-3); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: move-blob-3 20s infinite alternate ease-in-out; }
+        @keyframes move-blob-1 { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(200px, 100px) rotate(360deg); } }
+        @keyframes move-blob-2 { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(-200px, -150px) rotate(180deg); } }
+        @keyframes move-blob-3 { from { transform: scale(1); } to { transform: scale(1.5); } }
+        
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* --- Liquid Cursor --- */
+        .liquid-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-color: var(--glow-3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease-out, background-color 0.3s ease, opacity 0.3s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+            filter: blur(2px);
+        }
+        .liquid-cursor.hovered { transform: translate(-50%, -50%) scale(2.5); background-color: var(--glow-1); opacity: 0.5; }
+
+        /* --- Glassmorphism Card --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .glass-card:hover { 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 0 40px var(--glow-2);
+            border-color: var(--glow-3);
+        }
+
+        /* --- General Styling --- */
+        .text-glow { text-shadow: 0 0 8px var(--glow-3), 0 0 12px var(--glow-1); }
+        .text-gradient { background: linear-gradient(to right, var(--glow-3), var(--glow-1)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-title { @apply text-3xl md:text-4xl font-bold mb-12 text-center text-glow; }
+        .tag { background: rgba(0, 229, 255, 0.1); border: 1px solid rgba(0, 229, 255, 0.2); color: #00e5ff; @apply inline-block text-xs font-semibold px-3 py-1 rounded-full transition-all duration-300; }
+        .tag:hover { background: rgba(0, 229, 255, 0.2); transform: translateY(-2px); }
+
+        /* --- Fade-in animation --- */
+        .fade-in-section { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Scrollbar styles --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--glow-2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--glow-1); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Background & Cursor -->
+    <div class="aurora-background"> <div class="aurora-blob"></div> <div class="aurora-blob"></div> <div class="aurora-blob"></div> </div>
+    <div class="grid-overlay"></div>
+    <div class="liquid-cursor"></div>
+
+    <!-- Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white">MP<span class="text-glow">.</span></a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="text-slate-300 hover:text-white transition-colors">About</a>
+                <a href="#projects" class="text-slate-300 hover:text-white transition-colors">Projects</a>
+                <a href="#contact" class="text-slate-300 hover:text-white transition-colors">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none"><i data-feather="menu"></i></button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-black/80 backdrop-blur-sm">
+            <a href="#about" class="block py-3 px-4 text-sm text-slate-300 hover:bg-white/10">About</a>
+            <a href="#projects" class="block py-3 px-4 text-sm text-slate-300 hover:bg-white/10">Projects</a>
+            <a href="#contact" class="block py-3 px-4 text-sm text-slate-300 hover:bg-white/10">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center">
+            <div class="z-10">
+                <p class="text-lg text-slate-300 mb-2">Hello, I'm</p>
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white text-glow leading-tight mb-4">Manik Pandey</h1>
+                <p class="text-xl md:text-2xl font-medium text-slate-300 mb-8">
+                    I build intelligent systems with <span id="typing-text" class="font-roboto-mono text-gradient font-bold"></span>
+                </p>
+                <a href="#projects" class="inline-block bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-bold px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    View My Work
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 md:py-32 fade-in-section">
+            <h2 class="section-title">About Me</h2>
+            <div class="grid md:grid-cols-5 gap-10 items-center">
+                <div class="md:col-span-3 text-lg text-slate-300 space-y-4">
+                    <p>As a highly motivated Computer Science undergraduate specializing in <span class="text-cyan-400 font-semibold">Artificial Intelligence</span> and <span class="text-cyan-400 font-semibold">Machine Learning</span>, I am driven by a passion for building intelligent systems that solve complex, real-world problems.</p>
+                    <p>My work spans <span class="text-purple-400 font-semibold">AI/ML</span>, <span class="text-purple-400 font-semibold">Robotics</span>, <span class="text-purple-400 font-semibold">Computer Vision</span>, and <span class="text-purple-400 font-semibold">NLP</span>. I am particularly interested in the intersection of AI and clinical psychology, exploring affective computing and mental health analytics to create socially meaningful applications.</p>
+                    <p>I thrive in collaborative environments and am always eager to contribute to innovative projects, learn from peers, and build for impactful, large-scale solutions.</p>
+                </div>
+                <div class="md:col-span-2 flex justify-center md:justify-end">
+                    <div class="w-64 h-64 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 p-1.5 glass-card">
+                        <img src="https://placehold.co/400x400/0a0a1a/FFFFFF?text=MP" alt="Manik Pandey" class="rounded-full w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x400/0a0a1a/FFFFFF?text=MP';">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 md:py-32 fade-in-section">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Cards -->
+                <div class="glass-card rounded-2xl p-6 flex flex-col project-card"> <h3 class="text-xl font-bold text-white mb-3">Disaster Management Drone System</h3> <div class="flex flex-wrap gap-2 mb-4"> <span class="tag">AI</span> <span class="tag">Robotics</span> <span class="tag">YOLOv8</span> <span class="tag">ROS</span> <span class="tag">PX4</span> </div> <p class="text-gray-300 text-sm leading-relaxed flex-grow"> Engineered a dual-drone system for autonomous disaster response. Integrates a YOLOv8 surveillance drone (RAZOR) and a Jetson Nano-powered payload delivery drone (AIRBOTS) for high-precision navigation and object detection. </p> <div class="mt-6 flex items-center justify-end space-x-4"> <a href="https://github.com/ManikPandey/Drone_NIDAR" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors" aria-label="GitHub"><i data-feather="github"></i></a> </div> </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col project-card"> <h3 class="text-xl font-bold text-white mb-3">Multi-Domain Sentiment Analysis</h3> <div class="flex flex-wrap gap-2 mb-4"> <span class="tag">NLP</span> <span class="tag">LSTM</span> <span class="tag">GloVe</span> <span class="tag">PyTorch</span> </div> <p class="text-gray-300 text-sm leading-relaxed flex-grow"> Developed and benchmarked advanced NLP models for sentiment classification across four diverse datasets. Optimized text representation with GloVe embeddings to achieve robust, high-accuracy results. </p> <div class="mt-6 flex items-center justify-end space-x-4"> <a href="https://github.com/ManikPandey/Sentimental_analysis_LSTM_BNB_4dataset" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors" aria-label="GitHub"><i data-feather="github"></i></a> </div> </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col project-card"> <h3 class="text-xl font-bold text-white mb-3">Nestify – Home Rental Web App</h3> <div class="flex flex-wrap gap-2 mb-4"> <span class="tag">Full-Stack</span> <span class="tag">Node.js</span> <span class="tag">MongoDB</span> </div> <p class="text-gray-300 text-sm leading-relaxed flex-grow"> Engineered a scalable, full-stack rental platform with robust user authentication, secure access controls, and dynamic image uploads. Architected with an MVC structure for high maintainability. </p> <div class="mt-6 flex items-center justify-end space-x-4"> <a href="https://github.com/ManikPandey/nestify_HomeRentalApp" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors" aria-label="GitHub"><i data-feather="github"></i></a> </div> </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col project-card"> <h3 class="text-xl font-bold text-white mb-3">Phishing Detection Application</h3> <div class="flex flex-wrap gap-2 mb-4"> <span class="tag">ML</span> <span class="tag">Cybersecurity</span> </div> <p class="text-gray-300 text-sm leading-relaxed flex-grow"> Developed an ML-powered security tool to identify and alert users about phishing websites, utilizing supervised learning algorithms for high detection accuracy and enhancing online safety. </p> <div class="mt-6 flex items-center justify-end space-x-4"> <a href="https://github.com/ManikPandey/Phishing_Detection" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors" aria-label="GitHub"><i data-feather="github"></i></a> </div> </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col project-card"> <h3 class="text-xl font-bold text-white mb-3">WeatherApp (React)</h3> <div class="flex flex-wrap gap-2 mb-4"> <span class="tag">React</span> <span class="tag">API</span> </div> <p class="text-gray-300 text-sm leading-relaxed flex-grow"> Built a dynamic, real-time weather dashboard using React.js, consuming external APIs for city-based weather data. Designed an intuitive UI to enhance user experience and data accessibility. </p> <div class="mt-6 flex items-center justify-end space-x-4"> <a href="https://github.com/ManikPandey/WeatherApp_React" target="_blank" class="text-gray-400 hover:text-cyan-400 transition-colors" aria-label="GitHub"><i data-feather="github"></i></a> </div> </div>
+                <a href="https://github.com/ManikPandey" target="_blank" class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center text-center project-card group"> <h3 class="text-xl font-bold text-white mb-2">View More Projects</h3> <p class="text-gray-400 text-sm mb-4">Explore my full repository of work</p> <i data-feather="arrow-right-circle" class="text-white w-10 h-10 group-hover:text-cyan-400 transition-colors duration-300 transform group-hover:scale-110"></i> </a>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 md:py-32 text-center fade-in-section">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="max-w-2xl mx-auto text-lg text-slate-300 mb-12">
+                I'm actively seeking new opportunities and collaborations in AI and Robotics. Feel free to reach out through any of the platforms below.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <a href="tel:+919389125957" class="glass-card rounded-lg p-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 group project-card">
+                    <i data-feather="phone" class="w-5 h-5 text-cyan-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-slate-300 group-hover:text-white transition-colors text-sm font-medium">+91-9389125957</span>
+                </a>
+                <a href="mailto:manik.pandey.007@email.com" class="glass-card rounded-lg p-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 group project-card">
+                    <i data-feather="mail" class="w-5 h-5 text-cyan-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-slate-300 group-hover:text-white transition-colors text-sm font-medium">manik.pandey.007@email.com</span>
+                </a>
+                <a href="https://linkedin.com/in/manik-pandey-104899291/" target="_blank" class="glass-card rounded-lg p-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 group project-card">
+                    <i data-feather="linkedin" class="w-5 h-5 text-cyan-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-slate-300 group-hover:text-white transition-colors text-sm font-medium">LinkedIn</span>
+                </a>
+                <a href="https://github.com/ManikPandey" target="_blank" class="glass-card rounded-lg p-4 flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105 group project-card">
+                    <i data-feather="github" class="w-5 h-5 text-cyan-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-slate-300 group-hover:text-white transition-colors text-sm font-medium">GitHub</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-slate-400 border-t border-slate-800">
+        <div class="flex justify-center space-x-6 mb-4">
+            <a href="https://github.com/ManikPandey" target="_blank" class="hover:text-cyan-400 transition-colors"><i data-feather="github" class="w-6 h-6"></i></a>
+            <a href="https://linkedin.com/in/manik-pandey-104899291/" target="_blank" class="hover:text-cyan-400 transition-colors"><i data-feather="linkedin" class="w-6 h-6"></i></a>
+            <a href="mailto:manik.pandey.007@email.com" class="hover:text-cyan-400 transition-colors"><i data-feather="mail" class="w-6 h-6"></i></a>
+        </div>
+        <p class="font-roboto-mono text-sm">Designed & Built by Manik Pandey</p>
+        <p class="text-xs text-slate-500 mt-1">Inspired by modern web trends & crafted with AI.</p>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button id="scroll-to-top" class="fixed bottom-5 right-5 p-3 rounded-full bg-cyan-500/80 text-white hover:bg-cyan-600 focus:outline-none transition-opacity duration-300 opacity-0 transform hover:scale-110">
+        <i data-feather="arrow-up" class="w-6 h-6"></i>
+    </button>
+
+    <script>
+        // --- Feather Icons ---
+        feather.replace();
+
+        // --- Liquid Cursor Logic ---
+        const cursor = document.querySelector('.liquid-cursor');
+        const interactiveElements = document.querySelectorAll('a, button, .project-card, .tag');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // --- 3D Tilt Effect for Project Cards ---
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -5;
+                const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+            });
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // --- Header scroll effect ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('bg-gray-900/80', 'backdrop-blur-sm', 'shadow-lg');
+            } else {
+                header.classList.remove('bg-gray-900/80', 'backdrop-blur-sm', 'shadow-lg');
+            }
+        });
+
+        // --- Typing effect ---
+        const typingText = document.getElementById('typing-text');
+        const words = ["AI & ML.", "Robotics.", "Computer Vision.", "Generative AI."];
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typingText.textContent = currentWord.substring(0, charIndex--);
+            } else {
+                typingText.textContent = currentWord.substring(0, charIndex++);
+            }
+            if (!isDeleting && charIndex === currentWord.length + 1) {
+                isDeleting = true;
+                setTimeout(type, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, 500);
+            } else {
+                setTimeout(type, isDeleting ? 100 : 150);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // --- Scroll-to-top button ---
+        const scrollToTopButton = document.getElementById('scroll-to-top');
+        window.addEventListener('scroll', () => {
+            scrollToTopButton.classList.toggle('opacity-0', window.pageYOffset < 300);
+        });
+        scrollToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // --- Fade-in on scroll ---
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
